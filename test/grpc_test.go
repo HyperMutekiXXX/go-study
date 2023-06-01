@@ -3,8 +3,10 @@ package test
 import (
 	"fmt"
 	"github.com/go-study/service"
+	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto"
-
+	"log"
+	"net"
 	"testing"
 )
 
@@ -27,4 +29,14 @@ func TestProto(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println(newUser)
+}
+
+func TestService(t *testing.T) {
+	server := grpc.NewServer()
+	service.RegisterProdServiceServer(server, new(service.ProdService))
+	listen, err := net.Listen("tcp", "8082")
+	if err != nil {
+		log.Fatalln("服务监听端口失败", err)
+	}
+	server.Serve(listen)
 }
