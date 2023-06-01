@@ -57,9 +57,10 @@ func TestClient(t *testing.T) {
 func TestService(t *testing.T) {
 	server := grpc.NewServer()
 	service.RegisterProdServiceServer(server, new(service.ProdService))
-	listen, err := net.Listen("tcp", "127.0.0.1:8082")
+	listen, err := net.Listen("tcp", "127.0.0.1:8080")
 	if err != nil {
 		log.Fatalln("服务监听端口失败", err)
 	}
+	defer listen.Close()
 	server.Serve(listen)
 }
